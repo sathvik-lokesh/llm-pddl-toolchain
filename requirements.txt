@@ -1,0 +1,17 @@
+groq>=0.9
+click>=8.0
+
+# Web app
+fastapi>=0.111
+uvicorn[standard]>=0.29
+jinja2>=3.1
+python-multipart>=0.0.9
+
+# Database
+sqlalchemy>=2.0
+aiosqlite>=0.20
+
+# Fast Downward is used via subprocess — install separately:
+# https://github.com/aibasel/downward
+# Already available at: ~/fast_downward/
+# Override path with: export FAST_DOWNWARD_PATH=/path/to/fast-downward.py
