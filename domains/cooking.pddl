@@ -1,0 +1,25 @@
+(define (domain cooking)
+  (:requirements :strips :typing)
+  (:types food)
+  (:predicates 
+    (raw ?f - food)
+    (chopped ?f - food)
+    (cooked ?f - food)
+    (available ?f - food)
+  )
+  (:action chop
+    :parameters (?f - food)
+    :precondition (and (raw ?f) (available ?f))
+    :effect (and (chopped ?f) (not (raw ?f)))
+  )
+  (:action cook
+    :parameters (?f - food)
+    :precondition (and (chopped ?f) (available ?f))
+    :effect (and (cooked ?f) (not (chopped ?f)))
+  )
+  (:action prepare-pasta
+    :parameters (?p - food ?v - food)
+    :precondition (and (cooked ?p) (cooked ?v))
+    :effect (and (not (cooked ?p)) (not (cooked ?v)) (cooked ?p) (cooked ?v))
+  )
+)

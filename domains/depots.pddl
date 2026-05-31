@@ -1,0 +1,95 @@
+(define (domain depots)
+  (:requirements :strips :typing)
+
+  (:types
+    place locatable - object
+    depot distributor - place
+    truck hoist - locatable
+    surface - locatable
+    pallet crate - surface
+  )
+
+  (:predicates
+    (at ?x - locatable ?p - place)
+    (on ?c - crate ?s - surface)
+    (in ?c - crate ?t - truck)
+    (lifting ?h - hoist ?c - crate)
+    (available ?h - hoist)
+    (clear ?s - surface)
+  )
+
+  (:action drive
+    :parameters (?t - truck ?from - place ?to - place)
+    :precondition (at ?t ?from)
+    :effect (and
+      (at ?t ?to)
+      (not (at ?t ?from))
+    )
+  )
+
+  (:action lift
+    :parameters (?h - hoist ?c - crate ?s - surface ?p - place)
+    :precondition (and
+      (at ?h ?p)
+      (available ?h)
+      (at ?c ?p)
+      (on ?c ?s)
+      (clear ?c)
+    )
+    :effect (and
+      (lifting ?h ?c)
+      (clear ?s)
+      (not (available ?h))
+      (not (at ?c ?p))
+      (not (on ?c ?s))
+      (not (clear ?c))
+    )
+  )
+
+  (:action drop
+    :parameters (?h - hoist ?c - crate ?s - surface ?p - place)
+    :precondition (and
+      (at ?h ?p)
+      (at ?s ?p)
+      (clear ?s)
+      (lifting ?h ?c)
+    )
+    :effect (and
+      (available ?h)
+      (at ?c ?p)
+      (on ?c ?s)
+      (clear ?c)
+      (not (lifting ?h ?c))
+      (not (clear ?s))
+    )
+  )
+
+  (:action load
+    :parameters (?h - hoist ?c - crate ?t - truck ?p - place)
+    :precondition (and
+      (at ?h ?p)
+      (at ?t ?p)
+      (lifting ?h ?c)
+    )
+    :effect (and
+      (in ?c ?t)
+      (available ?h)
+      (not (lifting ?h ?c))
+    )
+  )
+
+  (:action unload
+    :parameters (?h - hoist ?c - crate ?t - truck ?p - place)
+    :precondition (and
+      (at ?h ?p)
+      (at ?t ?p)
+      (available ?h)
+      (in ?c ?t)
+    )
+    :effect (and
+      (lifting ?h ?c)
+      (not (in ?c ?t))
+      (not (available ?h))
+    )
+  )
+)

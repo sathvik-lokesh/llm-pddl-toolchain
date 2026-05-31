@@ -1,0 +1,30 @@
+(define (domain meal-preparation)
+  (:requirements :strips :typing)
+  (:types vegetable water pasta dish)
+  (:predicates 
+    (chopped ?v - vegetable)
+    (boiled ?w - water)
+    (cooked ?p - pasta)
+    (plated ?d - dish)
+  )
+  (:action chop-vegetable
+    :parameters (?v - vegetable)
+    :precondition (not (chopped ?v))
+    :effect (chopped ?v)
+  )
+  (:action boil-water
+    :parameters (?w - water)
+    :precondition (not (boiled ?w))
+    :effect (boiled ?w)
+  )
+  (:action cook-pasta
+    :parameters (?p - pasta ?w - water)
+    :precondition (and (boiled ?w) (not (cooked ?p)))
+    :effect (cooked ?p)
+  )
+  (:action plate-dish
+    :parameters (?d - dish ?v - vegetable ?p - pasta)
+    :precondition (and (chopped ?v) (cooked ?p) (not (plated ?d)))
+    :effect (plated ?d)
+  )
+)
