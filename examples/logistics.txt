@@ -1,0 +1,57 @@
+
+Generating PDDL...  done
+
+── Domain ──────────────────────────────────────────────
+(define (domain package-delivery)
+  (:requirements :strips :typing)
+  (:types location package robot)
+  (:predicates 
+    (at ?r - robot ?l - location)
+    (at ?p - package ?l - location)
+    (in-warehouse ?l - location)
+    (in-shop ?l - location)
+    (has ?r - robot ?p - package)
+    (connected ?l1 - location ?l2 - location)
+  )
+  (:action move-robot
+    :parameters (?r - robot ?l1 - location ?l2 - location)
+    :precondition (and (at ?r ?l1) (connected ?l1 ?l2))
+    :effect (and (at ?r ?l2) (not (at ?r ?l1)))
+  )
+  (:action pick-package
+    :parameters (?r - robot ?p - package ?l - location)
+    :precondition (and (at ?r ?l) (at ?p ?l) (not (has ?r ?p)))
+    :effect (and (has ?r ?p) (not (at ?p ?l)))
+  )
+  (:action drop-package
+    :parameters (?r - robot ?p - package ?l - location)
+    :precondition (and (at ?r ?l) (has ?r ?p))
+    :effect (and (at ?p ?l) (not (has ?r ?p)))
+  )
+)
+
+── Problem ─────────────────────────────────────────────
+(define (problem package-delivery-problem)
+  (:domain package-delivery)
+  (:objects r1 - robot p1 - package warehouse - location shop - location)
+  (:init 
+    (at r1 warehouse)
+    (at p1 warehouse)
+    (in-warehouse warehouse)
+    (in-shop shop)
+    (connected warehouse shop)
+    (connected shop warehouse)
+  )
+  (:goal (and (at p1 shop) (at r1 shop)))
+)
+
+Solving...       done  (3 steps, 0.25s)
+
+Plan:
+   1. (pick-package r1 p1 warehouse)
+   2. (move-robot r1 warehouse shop)
+   3. (drop-package r1 p1 shop)
+
+Explanation:
+  The robot first picks up the package from the warehouse, which allows it to carry the package to its next destination. Then, the robot moves from the warehouse to the shop, effectively transporting the package to the desired location. Finally, the robot drops the package at the shop, completing the delivery process and achieving the goal of moving the package from the warehouse to the shop. This sequence of actions ensures that the package is safely transported and delivered to its intended destination.
+
