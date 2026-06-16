@@ -76,7 +76,7 @@ Runs Fast Downward directly on hand-written IPC problem files (no LLM involved).
 ## Running the Web App
 
 ```bash
-git clone https://github.com/sathvik44mysore-cmyk/llm-pddl-toolchain
+git clone https://github.com/sathvik-lokesh/llm-pddl-toolchain
 cd llm-pddl-toolchain
 pip install -r requirements.txt
 export GROQ_API_KEY="your-key-here"
